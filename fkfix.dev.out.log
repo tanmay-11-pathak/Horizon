@@ -1,0 +1,10 @@
+
+> horizonv2@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.1 (Turbopack)
+- Local:         http://localhost:3001
+- Network:       http://172.16.85.65:3001
+- Environments: .env.local
+✓ Ready in 909ms
+[?25h

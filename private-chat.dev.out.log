@@ -1,0 +1,16 @@
+
+> horizonv2@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.1 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://172.16.85.65:3000
+- Environments: .env.local
+✓ Ready in 743ms
+Creating turbopack project { dir: 'D:\\HorizonV2\\horizonv2', testMode: true }
+
+ GET /chat 200 in 4.2s (next.js: 694ms, proxy.ts: 591ms, application-code: 2.9s)
+ GET /chat 200 in 3.8s (next.js: 978ms, proxy.ts: 170ms, application-code: 2.7s)
+ GET / 200 in 217ms (next.js: 61ms, proxy.ts: 36ms, application-code: 119ms)
+ GET /chat 404 in 171ms (next.js: 50ms, proxy.ts: 21ms, application-code: 101ms)
+✓ Compiled in 738ms

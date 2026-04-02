@@ -1,0 +1,67 @@
+
+> horizonv2@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.1 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://172.16.85.65:3000
+- Environments: .env.local
+✓ Ready in 575ms
+Creating turbopack project { dir: 'D:\\HorizonV2\\horizonv2', testMode: true }
+
+ GET /chat 200 in 3.7s (next.js: 462ms, proxy.ts: 732ms, application-code: 2.5s)
+ GET /chat 200 in 4.2s (next.js: 1075ms, proxy.ts: 903ms, application-code: 2.2s)
+ GET /chat 404 in 241ms (next.js: 82ms, proxy.ts: 32ms, application-code: 127ms)
+ GET /profile 404 in 150ms (next.js: 19ms, proxy.ts: 25ms, application-code: 107ms)
+ GET /chat 200 in 2.3s (next.js: 13ms, proxy.ts: 24ms, application-code: 2.3s)
+ GET /chat 200 in 2.3s (next.js: 11ms, proxy.ts: 20ms, application-code: 2.3s)
+ GET /chat 200 in 1297ms (next.js: 6ms, proxy.ts: 21ms, application-code: 1270ms)
+ POST /api/ai/summarize 200 in 4.2s (next.js: 613ms, proxy.ts: 10ms, application-code: 3.5s)
+ GET /profile 200 in 1889ms (next.js: 129ms, proxy.ts: 23ms, application-code: 1737ms)
+✓ Compiled in 1216ms
+✓ Compiled in 347ms
+ GET /profile 200 in 2.5s (next.js: 258ms, proxy.ts: 1043ms, application-code: 1165ms)
+ GET /profile 200 in 696ms (next.js: 15ms, proxy.ts: 59ms, application-code: 622ms)
+ GET /chat 200 in 2.7s (next.js: 815ms, proxy.ts: 1053ms, application-code: 790ms)
+ GET /profile 200 in 759ms (next.js: 35ms, proxy.ts: 100ms, application-code: 624ms)
+ GET /profile 200 in 759ms (next.js: 67ms, proxy.ts: 100ms, application-code: 592ms)
+ GET /profile 200 in 756ms (next.js: 141ms, proxy.ts: 102ms, application-code: 514ms)
+ GET /profile 200 in 761ms (next.js: 102ms, proxy.ts: 101ms, application-code: 557ms)
+ GET /chat 200 in 857ms (next.js: 92ms, proxy.ts: 21ms, application-code: 744ms)
+ GET /profile 200 in 747ms (next.js: 35ms, proxy.ts: 135ms, application-code: 577ms)
+ GET /chat 200 in 1060ms (next.js: 44ms, proxy.ts: 283ms, application-code: 733ms)
+ GET /chat 200 in 643ms (next.js: 90ms, proxy.ts: 27ms, application-code: 526ms)
+ GET /profile 200 in 645ms (next.js: 43ms, proxy.ts: 97ms, application-code: 505ms)
+ GET /chat 200 in 614ms (next.js: 46ms, proxy.ts: 77ms, application-code: 491ms)
+ GET /profile 200 in 607ms (next.js: 99ms, proxy.ts: 35ms, application-code: 473ms)
+ GET /profile 200 in 605ms (next.js: 165ms, proxy.ts: 35ms, application-code: 405ms)
+ GET /profile 200 in 606ms (next.js: 203ms, proxy.ts: 35ms, application-code: 367ms)
+ GET /profile 200 in 612ms (next.js: 130ms, proxy.ts: 35ms, application-code: 447ms)
+ GET /chat 200 in 806ms (next.js: 28ms, proxy.ts: 257ms, application-code: 521ms)
+ GET /profile 200 in 842ms (next.js: 31ms, proxy.ts: 84ms, application-code: 727ms)
+ GET /chat 200 in 784ms (next.js: 78ms, proxy.ts: 26ms, application-code: 680ms)
+ GET /profile 200 in 842ms (next.js: 24ms, proxy.ts: 134ms, application-code: 685ms)
+ GET /chat 200 in 801ms (next.js: 51ms, proxy.ts: 256ms, application-code: 493ms)
+ GET /profile 200 in 675ms (next.js: 98ms, proxy.ts: 79ms, application-code: 499ms)
+ GET /profile 200 in 671ms (next.js: 169ms, proxy.ts: 77ms, application-code: 425ms)
+ GET /profile 200 in 676ms (next.js: 137ms, proxy.ts: 77ms, application-code: 461ms)
+ GET /profile 200 in 676ms (next.js: 236ms, proxy.ts: 95ms, application-code: 345ms)
+ GET /chat 200 in 496ms (next.js: 32ms, proxy.ts: 119ms, application-code: 345ms)
+ GET /profile 200 in 452ms (next.js: 20ms, proxy.ts: 97ms, application-code: 334ms)
+ GET /profile 200 in 357ms (next.js: 85ms, proxy.ts: 86ms, application-code: 186ms)
+ GET /chat 200 in 487ms (next.js: 34ms, proxy.ts: 72ms, application-code: 380ms)
+ GET /chat 200 in 489ms (next.js: 30ms, proxy.ts: 81ms, application-code: 378ms)
+ GET /chat 200 in 398ms (next.js: 14ms, proxy.ts: 16ms, application-code: 369ms)
+ GET /chat 200 in 359ms (next.js: 6ms, proxy.ts: 17ms, application-code: 335ms)
+ GET /chat 200 in 462ms (next.js: 6ms, proxy.ts: 10ms, application-code: 445ms)
+ GET /chat 200 in 377ms (next.js: 6ms, proxy.ts: 15ms, application-code: 356ms)
+ GET /chat 200 in 384ms (next.js: 7ms, proxy.ts: 25ms, application-code: 353ms)
+ GET /chat 200 in 394ms (next.js: 6ms, proxy.ts: 28ms, application-code: 361ms)
+ GET /chat 200 in 348ms (next.js: 5ms, proxy.ts: 20ms, application-code: 324ms)
+ GET /chat 200 in 457ms (next.js: 4ms, proxy.ts: 25ms, application-code: 427ms)
+ GET /chat 200 in 339ms (next.js: 7ms, proxy.ts: 27ms, application-code: 306ms)
+  Reload env: .env.local
+ GET /profile 200 in 876ms (next.js: 75ms, proxy.ts: 692ms, application-code: 109ms)
+ GET /chat 200 in 1149ms (next.js: 450ms, proxy.ts: 154ms, application-code: 545ms)
+ GET /chat 200 in 1289ms (next.js: 6ms, proxy.ts: 27ms, application-code: 1256ms)
+ POST /api/presence 200 in 2.8s (next.js: 2.4s, proxy.ts: 39ms, application-code: 329ms)

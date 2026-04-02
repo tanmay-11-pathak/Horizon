@@ -1,0 +1,63 @@
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+[browser] Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview (https://picked-doberman-29.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js:12:3226)
+[browser] Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview (https://picked-doberman-29.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js:12:3226)
+[browser] Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview (https://picked-doberman-29.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js:12:3226)
+[browser] Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview (https://picked-doberman-29.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js:12:3226)
+[browser] Uncaught Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <RenderFromTemplateContext>
+      <ScrollAndMaybeFocusHandler cacheNode={{rsc:{...}, ...}}>
+        <InnerScrollAndFocusHandlerOld focusAndScrollRef={{scrollRef:null, ...}} cacheNode={{rsc:{...}, ...}}>
+          <ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}>
+            <LoadingBoundary name="chat/" loading={null}>
+              <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+                <RedirectBoundary>
+                  <RedirectErrorBoundary router={{...}}>
+                    <InnerLayoutRouter url="/chat" tree={[...]} params={{}} cacheNode={{rsc:{...}, ...}} ...>
+                      <SegmentViewNode type="page" pagePath="chat/page.tsx">
+                        <SegmentTrieNode>
+                        <ChatPage>
+                          <ChatWindow userId="user_3BdIx..." conversations={[...]}>
+                            <div className="flex flex-...">
+                              <div className="flex items...">
+                                <h1>
+                                <div className="flex items...">
+                                  <button
+                                    onClick={function createConversation}
++                                   disabled={true}
+-                                   disabled={null}
+                                    className="px-4 py-2 bg-black text-white rounded-xl text-sm"
+                                  >
++                                   New Chat
+                                  ...
+                              <div className="flex-1 ove...">
++                               <p className="text-center text-gray-400 mt-10">
+-                               <div className="flex min-h-full items-center justify-center">
+                                ...
+                              ...
+                      ...
+                    ...
+          ...
+
+    at <unknown> (https://react.dev/link/hydration-mismatch)
+    at p (<anonymous>)
+    at ChatWindow (components/ChatWindow.tsx:201:15)
+    at ChatPage (app\chat\page.tsx:8:10)
+  199 |           <>
+  200 |             {messages.length === 0 && (
+> 201 |               <p className="text-center text-gray-400 mt-10">No messages yet. Say hello!</p>
+      |               ^
+  202 |             )}
+  203 |             {messages.map(msg => (
+  204 |               <div key={msg.id} className={`flex ${msg.sender_id === userId ? 'justify-en...

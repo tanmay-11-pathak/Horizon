@@ -1,0 +1,9 @@
+⚠ Port 3000 is in use by process 15708, using available port 3001 instead.
+⨯ Another next dev server is already running.
+
+- Local:        http://localhost:3000
+- PID:          15708
+- Dir:          D:\HorizonV2\horizonv2
+- Log:          .next\dev\logs\next-development.log
+
+Run taskkill /PID 15708 /F to stop it.

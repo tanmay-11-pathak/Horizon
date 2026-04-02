@@ -1,0 +1,58 @@
+
+> horizonv2@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.1 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://172.16.85.65:3000
+- Environments: .env.local
+✓ Ready in 929ms
+Creating turbopack project { dir: 'D:\\HorizonV2\\horizonv2', testMode: true }
+
+ GET /chat 200 in 1913ms (next.js: 393ms, proxy.ts: 863ms, application-code: 658ms)
+ GET /chat 200 in 2.4s (next.js: 520ms, proxy.ts: 1314ms, application-code: 552ms)
+ GET / 200 in 206ms (next.js: 31ms, proxy.ts: 12ms, application-code: 164ms)
+ GET /chat 404 in 137ms (next.js: 41ms, proxy.ts: 21ms, application-code: 75ms)
+ GET /chat 404 in 221ms (next.js: 25ms, proxy.ts: 28ms, application-code: 168ms)
+ GET / 200 in 409ms (next.js: 31ms, proxy.ts: 20ms, application-code: 358ms)
+ GET /chat 200 in 1145ms (next.js: 6ms, proxy.ts: 1049ms, application-code: 91ms)
+ GET /chat 200 in 113ms (next.js: 5ms, proxy.ts: 22ms, application-code: 86ms)
+ GET /chat 200 in 96ms (next.js: 7ms, proxy.ts: 15ms, application-code: 73ms)
+ GET /chat 200 in 99ms (next.js: 4ms, proxy.ts: 14ms, application-code: 81ms)
+ GET /chat 200 in 154ms (next.js: 17ms, proxy.ts: 25ms, application-code: 111ms)
+  Reload env: .env.local
+ GET /chat 200 in 2.7s (next.js: 487ms, proxy.ts: 1936ms, application-code: 314ms)
+ GET /chat 200 in 1279ms (next.js: 168ms, proxy.ts: 891ms, application-code: 219ms)
+ GET /chat 200 in 407ms (next.js: 6ms, proxy.ts: 15ms, application-code: 386ms)
+ GET /chat 200 in 505ms (next.js: 25ms, proxy.ts: 35ms, application-code: 444ms)
+ GET /chat 200 in 502ms (next.js: 209ms, proxy.ts: 42ms, application-code: 251ms)
+ GET /chat 200 in 517ms (next.js: 63ms, proxy.ts: 39ms, application-code: 414ms)
+ GET /chat 200 in 521ms (next.js: 166ms, proxy.ts: 41ms, application-code: 314ms)
+ GET /chat 200 in 453ms (next.js: 13ms, proxy.ts: 40ms, application-code: 400ms)
+ GET /chat 200 in 428ms (next.js: 31ms, proxy.ts: 99ms, application-code: 298ms)
+ GET /chat 200 in 317ms (next.js: 18ms, proxy.ts: 41ms, application-code: 259ms)
+ GET /chat 200 in 317ms (next.js: 55ms, proxy.ts: 40ms, application-code: 221ms)
+ GET /chat 200 in 316ms (next.js: 96ms, proxy.ts: 39ms, application-code: 181ms)
+ GET /chat 200 in 313ms (next.js: 148ms, proxy.ts: 39ms, application-code: 126ms)
+ GET /chat 200 in 143ms (next.js: 8ms, proxy.ts: 20ms, application-code: 115ms)
+ GET /chat 200 in 79ms (next.js: 14ms, proxy.ts: 13ms, application-code: 52ms)
+ GET /chat 200 in 544ms (next.js: 178ms, proxy.ts: 122ms, application-code: 244ms)
+ GET /chat 200 in 496ms (next.js: 6ms, proxy.ts: 13ms, application-code: 478ms)
+ GET /chat 200 in 446ms (next.js: 53ms, proxy.ts: 41ms, application-code: 353ms)
+ GET /chat 200 in 443ms (next.js: 206ms, proxy.ts: 41ms, application-code: 195ms)
+ GET /chat 200 in 447ms (next.js: 164ms, proxy.ts: 40ms, application-code: 243ms)
+ GET /chat 200 in 446ms (next.js: 245ms, proxy.ts: 58ms, application-code: 143ms)
+ GET /chat 200 in 465ms (next.js: 9ms, proxy.ts: 296ms, application-code: 160ms)
+ GET /chat 200 in 475ms (next.js: 27ms, proxy.ts: 15ms, application-code: 433ms)
+ GET /chat 200 in 462ms (next.js: 123ms, proxy.ts: 72ms, application-code: 267ms)
+ GET /chat 200 in 461ms (next.js: 217ms, proxy.ts: 74ms, application-code: 170ms)
+ GET /chat 200 in 464ms (next.js: 175ms, proxy.ts: 73ms, application-code: 217ms)
+ GET /chat 200 in 431ms (next.js: 267ms, proxy.ts: 33ms, application-code: 131ms)
+ GET /chat 200 in 296ms (next.js: 8ms, proxy.ts: 73ms, application-code: 215ms)
+ GET /chat 200 in 181ms (next.js: 19ms, proxy.ts: 17ms, application-code: 145ms)
+ GET /chat 200 in 165ms (next.js: 19ms, proxy.ts: 55ms, application-code: 91ms)
+ GET /chat 200 in 164ms (next.js: 49ms, proxy.ts: 62ms, application-code: 53ms)
+✓ Compiled in 472ms
+✓ Compiled in 518ms
+ GET /chat 200 in 619ms (next.js: 306ms, proxy.ts: 143ms, application-code: 170ms)
+ GET /chat 200 in 72ms (next.js: 6ms, proxy.ts: 16ms, application-code: 50ms)
