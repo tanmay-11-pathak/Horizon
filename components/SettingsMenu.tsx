@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useClerk } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
+import { ProfileEditDialog } from '@/components/profile-edit-dialog'
 
 interface Props {
   username: string
@@ -51,16 +52,17 @@ export default function SettingsMenu({ username, avatarUrl }: Props) {
             <p className="text-sm font-medium text-white">{username || 'Your account'}</p>
             <p className="text-xs text-gray-400">Your account</p>
           </div>
-          <a
-            href="/profile"
-            className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-[#2a2a2a] transition-colors"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-            Edit profile
-          </a>
+          <ProfileEditDialog initialData={{ username: username || '', avatarUrl: avatarUrl || '' }}>
+            <button
+              className="flex w-full text-left items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-[#2a2a2a] transition-colors outline-none cursor-pointer"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+              Edit profile
+            </button>
+          </ProfileEditDialog>
           <button
             onClick={handleSignOut}
             className="flex items-center gap-3 px-4 py-3 text-sm text-red-400 hover:bg-[#2a2a2a] transition-colors w-full text-left"

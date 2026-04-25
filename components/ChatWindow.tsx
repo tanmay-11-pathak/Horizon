@@ -12,6 +12,8 @@ interface Message {
   sender_id: string
   created_at: string
   is_read: boolean
+  media_url: string | null
+  media_type: string | null
 }
 
 interface Props {
@@ -29,6 +31,13 @@ interface OtherUser {
 export default function ChatWindow({ userId }: Props) {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
+  const [smartReplies, setSmartReplies] = useState<string[]>([])
+  const [loadingReplies, setLoadingReplies] = useState(false)
+  const [translatedMessages, setTranslatedMessages] = useState<Record<string, string>>({})
+  const [translatingId, setTranslatingId] = useState<string | null>(null)
+  const [mediaFile, setMediaFile] = useState<File | null>(null)
+  const [mediaPreview, setMediaPreview] = useState<string | null>(null)
+  const [uploadingMedia, setUploadingMedia] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
   const [sendError, setSendError] = useState<string | null>(null)
   const [conversationId, setConversationId] = useState<string | null>(null)
@@ -36,6 +45,7 @@ export default function ChatWindow({ userId }: Props) {
   const [profile, setProfile] = useState<{ username: string, avatar_url: string | null } | null>(null)
   const [otherUser, setOtherUser] = useState<OtherUser | null>(null)
   const [groupInfo, setGroupInfo] = useState<{ name: string, memberCount: number } | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
   const lastPresenceUpdate = useRef<number>(0)
   const typingChannelRef = useRef<ReturnType<typeof supabase.channel> | null>(null)
@@ -285,12 +295,14 @@ export default function ChatWindow({ userId }: Props) {
           filter: `conversation_id=eq.${conversationId}`,
         },
         (payload) => {
-          const incoming = payload.new as Message
-          setMessages((prev) =>
-            prev.some((message) => message.id === incoming.id)
-              ? prev
-              : [...prev, incoming]
-          )
+          const newMsg = payload.new as Message
+          setMessages((prev) => {
+            if (prev.find((m) => m.id === newMsg.id)) return prev
+            if (newMsg.sender_id !== userId) {
+              void fetchSmartReplies(newMsg.content)
+            }
+            return [...prev, newMsg]
+          })
         }
       )
       .on(
@@ -349,6 +361,36 @@ export default function ChatWindow({ userId }: Props) {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
+  const clearMediaSelection = () => {
+    if (mediaPreview) {
+      URL.revokeObjectURL(mediaPreview)
+    }
+    setMediaFile(null)
+    setMediaPreview(null)
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
+
+  const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (file.size > 50 * 1024 * 1024) {
+      alert('File too large. Maximum size is 50MB.')
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+      return
+    }
+
+    if (mediaPreview) {
+      URL.revokeObjectURL(mediaPreview)
+    }
+
+    setMediaFile(file)
+    setMediaPreview(URL.createObjectURL(file))
+  }
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value)
     if (conversationId && typingChannelRef.current) {
@@ -360,12 +402,65 @@ export default function ChatWindow({ userId }: Props) {
     }
   }
 
+  const fetchSmartReplies = async (message: string) => {
+    setLoadingReplies(true)
+    setSmartReplies([])
+    try {
+      const res = await fetch('/api/ai/smart-replies', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lastMessage: message })
+      })
+      const data = await res.json()
+      setSmartReplies(data.replies || [])
+    } catch {
+      setSmartReplies([])
+    }
+    setLoadingReplies(false)
+  }
+
+  const translateMessage = async (msgId: string, content: string) => {
+    setTranslatingId(msgId)
+    const res = await fetch('/api/ai/translate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: content, targetLanguage: 'English' })
+    })
+    const data = await res.json()
+    setTranslatedMessages((prev) => ({ ...prev, [msgId]: data.translated }))
+    setTranslatingId(null)
+  }
+
   const sendMessage = async () => {
-    if (!input.trim() || !conversationId) return
+    if ((!input.trim() && !mediaFile) || !conversationId) return
 
     const content = input.trim()
     setInput('')
     setSendError(null)
+
+    let mediaUrl: string | null = null
+    let mediaType: string | null = null
+
+    if (mediaFile) {
+      setUploadingMedia(true)
+      const fileExt = mediaFile.name.split('.').pop()
+      const filePath = `${conversationId}/${Date.now()}.${fileExt}`
+      const { error } = await supabase.storage
+        .from('chat-media')
+        .upload(filePath, mediaFile)
+
+      if (!error) {
+        const { data } = supabase.storage.from('chat-media').getPublicUrl(filePath)
+        mediaUrl = data.publicUrl
+        mediaType = mediaFile.type.startsWith('video/') ? 'video' : 'image'
+      } else {
+        const message = formatDbError(error)
+        setSendError(`Media upload failed: ${message}`)
+      }
+
+      setUploadingMedia(false)
+      clearMediaSelection()
+    }
 
     const hasProfile = await ensureProfile()
     if (!hasProfile) {
@@ -378,7 +473,9 @@ export default function ChatWindow({ userId }: Props) {
       .insert({
         conversation_id: conversationId,
         sender_id: userId,
-        content,
+        content: content || '',
+        media_url: mediaUrl,
+        media_type: mediaType,
       })
       .select()
       .single()
@@ -521,34 +618,86 @@ export default function ChatWindow({ userId }: Props) {
                 {messages.map((msg) => (
                   <div key={msg.id} className={`flex message-bubble ${msg.sender_id === userId ? 'justify-end' : 'justify-start'}`}>
                     <div className={`flex flex-col max-w-xs ${msg.sender_id === userId ? 'items-end' : 'items-start'}`}>
-                      <div
-                        className={`px-4 py-2 rounded-2xl text-sm text-white ${msg.sender_id === userId ? 'rounded-br-sm' : 'rounded-bl-sm'}`}
-                        style={
-                          msg.sender_id === userId
-                            ? {
-                                background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
-                                boxShadow: '0 0 15px rgba(124,58,237,0.3)',
-                              }
-                            : {
-                                background: 'rgba(255,255,255,0.06)',
-                                border: '1px solid rgba(255,255,255,0.08)',
-                                backdropFilter: 'blur(10px)',
-                                WebkitBackdropFilter: 'blur(10px)',
-                              }
-                        }
-                      >
-                        {msg.content}
-                      </div>
-                      <div className="mt-1 px-1 flex items-center gap-1">
-                        <span className="text-[11px] text-[#666]">
+                      {msg.media_url && msg.media_type === 'image' && (
+                        <div
+                          style={{
+                            borderRadius: 12,
+                            overflow: 'hidden',
+                            marginBottom: msg.content ? 6 : 0,
+                            maxWidth: 260,
+                            cursor: 'pointer',
+                          }}
+                          onClick={() => window.open(msg.media_url!, '_blank')}
+                        >
+                          <img
+                            src={msg.media_url}
+                            alt="shared image"
+                            style={{ width: '100%', height: 'auto', display: 'block', maxHeight: 300, objectFit: 'cover' }}
+                          />
+                        </div>
+                      )}
+                      {msg.media_url && msg.media_type === 'video' && (
+                        <div style={{ borderRadius: 12, overflow: 'hidden', marginBottom: msg.content ? 6 : 0, maxWidth: 260 }}>
+                          <video
+                            src={msg.media_url}
+                            controls
+                            style={{ width: '100%', maxHeight: 300, display: 'block' }}
+                          />
+                        </div>
+                      )}
+                      {msg.content && (
+                        <div
+                          className={`px-4 py-2 rounded-2xl text-sm text-white ${msg.sender_id === userId ? 'rounded-br-sm' : 'rounded-bl-sm'}`}
+                          style={
+                            msg.sender_id === userId
+                              ? {
+                                  background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
+                                  boxShadow: '0 0 15px rgba(124,58,237,0.3)',
+                                }
+                              : {
+                                  background: 'rgba(255,255,255,0.06)',
+                                  border: '1px solid rgba(255,255,255,0.08)',
+                                  backdropFilter: 'blur(10px)',
+                                  WebkitBackdropFilter: 'blur(10px)',
+                                }
+                          }
+                        >
+                          {msg.content}
+                        </div>
+                      )}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <span style={{ fontSize: 11, color: '#555' }}>
                           {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
+                        {msg.sender_id !== userId && (
+                          <button
+                            onClick={() => translateMessage(msg.id, msg.content)}
+                            style={{
+                              background: 'none', border: 'none',
+                              color: '#555', fontSize: 11,
+                              cursor: 'pointer', padding: '0 4px'
+                            }}
+                          >
+                            {translatingId === msg.id ? '...' : '🌐'}
+                          </button>
+                        )}
                         {msg.sender_id === userId && (
-                          <span className={`text-[11px] ${msg.is_read ? 'text-purple-400' : 'text-[#666]'}`}>
+                          <span style={{ fontSize: 11, color: msg.is_read ? '#7c3aed' : '#555' }}>
                             {msg.is_read ? '\u2713\u2713' : '\u2713'}
                           </span>
                         )}
                       </div>
+                      {translatedMessages[msg.id] && (
+                        <p style={{
+                          fontSize: 12, color: '#888',
+                          margin: '4px 0 0', fontStyle: 'italic',
+                          padding: '4px 8px',
+                          background: 'rgba(255,255,255,0.04)',
+                          borderRadius: 8
+                        }}>
+                          {translatedMessages[msg.id]}
+                        </p>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -588,7 +737,102 @@ export default function ChatWindow({ userId }: Props) {
               borderTop: '1px solid rgba(255,255,255,0.06)',
             }}
           >
+            {loadingReplies && smartReplies.length === 0 && (
+              <div style={{ padding: '8px 24px', color: '#666', fontSize: 12 }}>
+                Thinking...
+              </div>
+            )}
+            {smartReplies.length > 0 && (
+              <div style={{
+                padding: '8px 24px',
+                display: 'flex', gap: 8, flexWrap: 'wrap'
+              }}>
+                {smartReplies.map((reply, i) => (
+                  <button
+                    key={i}
+                    onClick={() => {
+                      setInput(reply)
+                      setSmartReplies([])
+                    }}
+                    style={{
+                      padding: '6px 14px',
+                      background: 'rgba(124,58,237,0.15)',
+                      border: '1px solid rgba(124,58,237,0.3)',
+                      borderRadius: 20, color: '#c4b5fd',
+                      fontSize: 13, cursor: 'pointer',
+                      transition: 'all 0.2s'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'rgba(124,58,237,0.3)'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'rgba(124,58,237,0.15)'
+                    }}
+                  >{reply}</button>
+                ))}
+              </div>
+            )}
+            {mediaPreview && (
+              <div style={{ padding: '8px 0', display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ position: 'relative', display: 'inline-block' }}>
+                  {mediaFile?.type.startsWith('video/') ? (
+                    <video src={mediaPreview} style={{ height: 80, borderRadius: 8, maxWidth: 140 }} />
+                  ) : (
+                    <img src={mediaPreview} alt="preview" style={{ height: 80, borderRadius: 8, maxWidth: 140, objectFit: 'cover' }} />
+                  )}
+                  <button
+                    onClick={clearMediaSelection}
+                    style={{
+                      position: 'absolute',
+                      top: -6,
+                      right: -6,
+                      width: 20,
+                      height: 20,
+                      borderRadius: '50%',
+                      background: '#ef4444',
+                      border: 'none',
+                      color: 'white',
+                      fontSize: 12,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    x
+                  </button>
+                </div>
+                <span style={{ color: '#666', fontSize: 12 }}>
+                  {uploadingMedia ? 'Uploading...' : 'Ready to send'}
+                </span>
+              </div>
+            )}
             <div className="flex gap-3">
+              <input
+                type="file"
+                ref={fileInputRef}
+                accept="image/*,video/*"
+                style={{ display: 'none' }}
+                onChange={handleFileSelect}
+              />
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={conversationId === null}
+                style={{
+                  padding: '10px 12px',
+                  borderRadius: 12,
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                  color: '#888',
+                  cursor: 'pointer',
+                  fontSize: 18,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                {'\uD83D\uDCCE'}
+              </button>
               <input
                 className="flex-1 rounded-xl px-4 py-2.5 text-sm outline-none text-white placeholder:text-[#666] border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.05)] focus:border-[rgba(124,58,237,0.5)]"
                 placeholder="Type a message..."
@@ -604,9 +848,9 @@ export default function ChatWindow({ userId }: Props) {
                   background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
                   boxShadow: '0 0 20px rgba(124,58,237,0.4)',
                 }}
-                disabled={conversationId === null}
+                disabled={conversationId === null || uploadingMedia}
               >
-                Send
+                {uploadingMedia ? 'Uploading...' : 'Send'}
               </button>
             </div>
             {sendError && <p className="pt-2 text-sm text-red-400">{sendError}</p>}

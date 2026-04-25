@@ -4,6 +4,7 @@ import { useClerk } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import CreateGroupModal from '@/components/CreateGroupModal'
+import { ProfileEditDialog } from '@/components/profile-edit-dialog'
 
 interface Profile {
   id: string
@@ -505,13 +506,15 @@ export default function Sidebar({ userId, activeConversationId, onSelectConversa
       )}
 
       <div className="bg-[#161616] border-t border-[#222] p-4 flex items-center gap-3">
-        <a href="/profile" className="flex items-center gap-3 min-w-0 flex-1">
-          {renderAvatar(myProfile?.username || '?', myProfile?.avatar_url || null, 'w-9 h-9')}
-          <div className="min-w-0">
-            <p className="text-sm font-medium text-white truncate">{myProfile?.username || 'Your profile'}</p>
-            <p className="text-xs text-[#888]">Edit profile</p>
-          </div>
-        </a>
+        <ProfileEditDialog initialData={{ username: myProfile?.username || '', avatarUrl: myProfile?.avatar_url || '' }}>
+          <button className="flex items-center gap-3 min-w-0 flex-1 text-left cursor-pointer outline-none">
+            {renderAvatar(myProfile?.username || '?', myProfile?.avatar_url || null, 'w-9 h-9')}
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-white truncate">{myProfile?.username || 'Your profile'}</p>
+              <p className="text-xs text-[#888] hover:text-[#c4b5fd] transition-colors">Edit profile</p>
+            </div>
+          </button>
+        </ProfileEditDialog>
         <button
           onClick={handleSignOut}
           className="ml-auto p-2 rounded-lg hover:bg-[#222] transition-colors"
