@@ -212,6 +212,7 @@ export default function HorizonAI({ userId }: Props) {
                 borderRadius: 16,
                 fontSize: 14,
                 lineHeight: 1.6,
+                whiteSpace: msg.role === 'user' ? 'pre-wrap' : 'normal',
                 ...(msg.role === 'user'
                   ? {
                       background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
@@ -228,40 +229,27 @@ export default function HorizonAI({ userId }: Props) {
                     })
               }}
             >
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                components={{
-                  code({node, inline, className, children, ...props}: any) {
-                    const match = /language-(\w+)/.exec(className || '')
-                    return !inline && match ? (
-                      <div className="rounded-md overflow-hidden my-2 border border-[rgba(255,255,255,0.1)]">
-                        <div className="bg-[rgba(0,0,0,0.3)] px-3 py-1.5 text-xs text-[#a3a3a3] border-b border-[rgba(255,255,255,0.1)] uppercase tracking-wider">{match[1]}</div>
-                        <pre className="p-3 bg-[rgba(0,0,0,0.2)] overflow-x-auto text-[13px] font-mono leading-relaxed" {...props}>
-                          <code className={className}>
-                            {children}
-                          </code>
-                        </pre>
-                      </div>
-                    ) : (
-                      <code className="bg-[rgba(255,255,255,0.1)] px-1.5 py-0.5 rounded text-[#c4b5fd] text-[0.85em] font-mono" {...props}>
-                        {children}
-                      </code>
-                    )
-                  },
-                  p: ({ children }) => <p className="mb-3 last:mb-0 leading-relaxed">{children}</p>,
-                  ul: ({ children }) => <ul className="list-disc pl-5 mb-3 space-y-1">{children}</ul>,
-                  ol: ({ children }) => <ol className="list-decimal pl-5 mb-3 space-y-1">{children}</ol>,
-                  li: ({ children }) => <li className="leading-relaxed">{children}</li>,
-                  a: ({ children, href }) => <a href={href} target="_blank" rel="noreferrer" className="text-purple-400 hover:underline">{children}</a>,
-                  strong: ({ children }) => <strong className="font-semibold text-white drop-shadow-sm">{children}</strong>,
-                  h1: ({ children }) => <h1 className="text-xl font-bold text-white mb-3 mt-5 drop-shadow-sm">{children}</h1>,
-                  h2: ({ children }) => <h2 className="text-lg font-bold text-white mb-3 mt-4 drop-shadow-sm">{children}</h2>,
-                  h3: ({ children }) => <h3 className="text-base font-bold text-white mb-2 mt-3">{children}</h3>,
-                  blockquote: ({ children }) => <blockquote className="border-l-2 border-purple-500 pl-4 py-1 my-3 text-[#ccc] bg-[rgba(124,58,237,0.05)] rounded-r-md">{children}</blockquote>,
-                }}
-              >
-                {msg.content}
-              </ReactMarkdown>
+              {msg.role === 'assistant' ? (
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    p: ({children}) => <p style={{ margin: '0 0 8px 0', lineHeight: 1.7 }}>{children}</p>,
+                    h3: ({children}) => <h3 style={{ color: 'white', fontSize: 15, fontWeight: 700, margin: '12px 0 6px' }}>{children}</h3>,
+                    ul: ({children}) => <ul style={{ paddingLeft: 20, margin: '8px 0' }}>{children}</ul>,
+                    li: ({children}) => <li style={{ marginBottom: 4, color: 'rgba(255,255,255,0.8)' }}>{children}</li>,
+                    strong: ({children}) => <strong style={{ color: 'white', fontWeight: 700 }}>{children}</strong>,
+                    table: ({children}) => <table style={{ width: '100%', borderCollapse: 'collapse', margin: '12px 0', fontSize: 13 }}>{children}</table>,
+                    th: ({children}) => <th style={{ padding: '8px 12px', borderBottom: '1px solid rgba(255,255,255,0.1)', textAlign: 'left', color: 'rgba(255,255,255,0.6)', fontWeight: 600 }}>{children}</th>,
+                    td: ({children}) => <td style={{ padding: '8px 12px', borderBottom: '1px solid rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.7)' }}>{children}</td>,
+                    code: ({children}) => <code style={{ background: 'rgba(255,255,255,0.1)', padding: '2px 6px', borderRadius: 4, fontFamily: 'monospace', fontSize: 13 }}>{children}</code>,
+                    hr: () => <hr style={{ border: 'none', borderTop: '1px solid rgba(255,255,255,0.1)', margin: '12px 0' }} />,
+                  }}
+                >
+                  {msg.content as string}
+                </ReactMarkdown>
+              ) : (
+                msg.content
+              )}
             </div>
           </div>
         ))}
