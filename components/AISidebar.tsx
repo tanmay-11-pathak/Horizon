@@ -9,9 +9,10 @@ interface Message {
 
 interface Props {
   messages: Message[]
+  onOpenChange?: (open: boolean) => void
 }
 
-export default function AISidebar({ messages }: Props) {
+export default function AISidebar({ messages, onOpenChange }: Props) {
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState('')
   const [reply, setReply] = useState('')
@@ -50,8 +51,19 @@ export default function AISidebar({ messages }: Props) {
   return (
     <>
       <button
-        onClick={() => setOpen(!open)}
-        className="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs transition-colors"
+        onClick={() => {
+          const next = !open
+          setOpen(next)
+          onOpenChange?.(next)
+        }}
+        className="px-4 py-2 text-[12px] font-medium transition-colors uppercase tracking-wide"
+        style={{
+          fontFamily: '"JetBrains Mono", monospace',
+          background: '#222222',
+          border: '1px solid #7c3aed',
+          color: '#7c3aed',
+          boxShadow: '0 0 10px rgba(124, 58, 237, 0.3)',
+        }}
       >
         {open ? 'Close AI' : 'AI Assistant'}
       </button>
@@ -63,19 +75,17 @@ export default function AISidebar({ messages }: Props) {
             top: 70,
             right: 16,
             width: 320,
-            background: 'rgba(15,15,15,0.95)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            border: '1px solid rgba(124,58,237,0.3)',
-            borderRadius: 16,
+            background: '#161616',
+            border: '1px solid #2a2a2a',
+            borderRadius: 0,
             padding: 20,
             zIndex: 99999,
             pointerEvents: 'auto',
-            boxShadow: '0 0 40px rgba(124,58,237,0.2)',
+            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4)',
             display: 'flex',
             flexDirection: 'column',
             gap: 16,
-            color: 'white',
+            color: '#e5e5e5',
           }}
         >
           <h2 className="font-semibold text-sm">AI Assistant</h2>
@@ -84,12 +94,13 @@ export default function AISidebar({ messages }: Props) {
             <button
               onClick={summarize}
               disabled={loadingSummary}
-              className="w-full px-3 py-2 bg-[#1e1e1e] rounded-xl text-sm hover:bg-[#252525] transition-colors"
+              className="w-full px-3 py-2 rounded-xl text-sm transition-colors"
+              style={{ background: '#222222', border: '1px solid #2a2a2a' }}
             >
               {loadingSummary ? 'Summarizing...' : 'Summarize this chat'}
             </button>
             {summary && (
-              <p className="mt-2 text-sm text-[#ccc] bg-[#1a1a1a] p-3 rounded-xl">
+              <p className="mt-2 text-sm text-[#71717a] bg-[#222222] p-3">
                 {summary}
               </p>
             )}
@@ -97,22 +108,32 @@ export default function AISidebar({ messages }: Props) {
 
           <div className="flex flex-col gap-2">
             <input
-              className="border border-[#333] bg-[#1e1e1e] text-white rounded-xl px-3 py-2 text-sm outline-none"
+              className="border px-3 py-2 text-sm outline-none text-[#e5e5e5]"
               placeholder="Ask AI anything..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && askAI()}
-              style={{ position: 'relative', zIndex: 1, pointerEvents: 'auto' }}
+              style={{
+                borderColor: '#2a2a2a',
+                background: '#0d0d0d',
+                position: 'relative',
+                zIndex: 1,
+                pointerEvents: 'auto',
+              }}
             />
             <button
               onClick={askAI}
               disabled={loadingChat}
-              className="px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-sm transition-colors"
+              className="px-3 py-2 text-sm transition-colors text-white"
+              style={{
+                background: '#7c3aed',
+                border: 'none',
+              }}
             >
               {loadingChat ? 'Thinking...' : 'Ask'}
             </button>
             {reply && (
-              <p className="text-sm text-[#ccc] bg-[#1a1a1a] p-3 rounded-xl">
+              <p className="text-sm text-[#71717a] bg-[#222222] p-3">
                 {reply}
               </p>
             )}

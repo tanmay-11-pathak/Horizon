@@ -279,11 +279,11 @@ export default function Sidebar({ userId, activeConversationId, onSelectConversa
 
   const renderAvatar = (username: string, avatarUrl: string | null, sizeClass: string) => {
     if (avatarUrl) {
-      return <img src={avatarUrl} alt="" className={`${sizeClass} rounded-full object-cover`} />
+      return <img src={avatarUrl} alt="" className={`${sizeClass} object-cover`} />
     }
 
     return (
-      <div className={`${sizeClass} rounded-full bg-gradient-to-br ${getGradient(username || '?')} flex items-center justify-center`}>
+      <div className={`${sizeClass} bg-gradient-to-br ${getGradient(username || '?')} flex items-center justify-center`}>
         <span className="text-sm font-semibold text-white">{(username?.[0] || '?').toUpperCase()}</span>
       </div>
     )
@@ -295,58 +295,25 @@ export default function Sidebar({ userId, activeConversationId, onSelectConversa
   }
 
   return (
-    <aside
-      className="w-80 h-full flex flex-col"
-      style={{
-        background: 'rgba(10,10,10,0.95)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        borderRight: '1px solid rgba(255,255,255,0.06)',
-      }}
-    >
-      <div className="p-4 border-b border-[rgba(255,255,255,0.06)]">
-        <h1
-          className="neon-text"
-          style={{
-            background: 'linear-gradient(135deg, #ffffff, #c4b5fd)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            fontSize: 22,
-            fontWeight: 700,
-            letterSpacing: '-0.5px',
-          }}
-        >
+    <aside className="w-[360px] h-full flex flex-col bg-[#161616] border-r border-[#2a2a2a]">
+      <div className="p-6 border-b border-[#2a2a2a]">
+        <h1 className="text-[20px] font-extrabold tracking-[2px] uppercase text-[#c4a67e] mb-5 flex items-center gap-2">
+          <span className="w-3 h-3 bg-[#c4a67e] inline-block rotate-45" />
           Horizon
         </h1>
         <input
-          className="mt-3 w-full rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-[#666] outline-none focus:border-purple-500"
-          style={{
-            background: 'rgba(255,255,255,0.05)',
-            border: '1px solid rgba(255,255,255,0.08)',
-          }}
-          placeholder="Search users..."
+          className="w-full rounded-[4px] px-4 py-3 text-sm text-[#e5e5e5] placeholder-[#71717a] outline-none transition-all duration-200"
+          style={{ background: '#0d0d0d', border: '1px solid #2a2a2a' }}
+          placeholder="Search conversations..."
           value={searchQuery}
           onChange={(e) => searchUsers(e.target.value)}
         />
         <button
           onClick={() => setShowCreateGroup(true)}
-          style={{
-            marginTop: 10,
-            width: '100%',
-            padding: '8px',
-            background: 'rgba(124,58,237,0.1)',
-            border: '1px solid rgba(124,58,237,0.2)',
-            borderRadius: 10,
-            color: '#c4b5fd',
-            fontSize: 13,
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 6
-          }}
+          className="mt-3 w-full py-2.5 text-[#71717a] text-[12px] font-semibold uppercase tracking-wide cursor-pointer transition-all duration-200 hover:text-[#c4a67e]"
+          style={{ background: 'transparent', border: '1px dashed #2a2a2a' }}
         >
-          <span>+</span> New Group
+          + New Group
         </button>
       </div>
 
@@ -362,71 +329,48 @@ export default function Sidebar({ userId, activeConversationId, onSelectConversa
         />
       )}
 
-      <div
-        onClick={() => onSelectHorizonAI()}
-        className="flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors border-l-2"
-        style={{
-          background: isHorizonAIActive ? 'rgba(124,58,237,0.15)' : 'transparent',
-          borderLeftColor: isHorizonAIActive ? '#7c3aed' : 'transparent',
-          borderBottom: '1px solid rgba(255,255,255,0.04)'
-        }}
-        onMouseEnter={(e) => {
-          if (!isHorizonAIActive) e.currentTarget.style.background = 'rgba(255,255,255,0.04)'
-        }}
-        onMouseLeave={(e) => {
-          if (!isHorizonAIActive) e.currentTarget.style.background = 'transparent'
-        }}
-      >
+      <div className="mt-2">
         <div
+          onClick={() => onSelectHorizonAI()}
+          className="px-6 py-4 flex items-center gap-3 cursor-pointer border-l-2 border-[#7c3aed]"
           style={{
-            width: 40,
-            height: 40,
-            borderRadius: '50%',
-            flexShrink: 0,
-            background: 'linear-gradient(135deg, #7c3aed, #06b6d4)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 0 12px rgba(124,58,237,0.4)'
+            background: 'linear-gradient(90deg, rgba(124,58,237,0.05) 0%, transparent 100%)',
           }}
         >
-          <span style={{ color: 'white', fontSize: 16 }}>✦</span>
+          <div className="relative shrink-0 w-12 h-12">
+            <div className="w-full h-full rounded-[2px]" style={{ background: 'linear-gradient(45deg, #7c3aed, #c4a67e)' }} />
+            <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-[#10b981] border-2 border-[#161616]" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-sm font-semibold text-[#7c3aed]">Horizon AI</p>
+              <p className="text-[11px] font-mono text-[#71717a]">Just now</p>
+            </div>
+            <p className="text-[13px] text-[#71717a] truncate">How can I assist your workflow today?</p>
+          </div>
         </div>
-        <div className="flex-1 min-w-0">
-          <p style={{ color: 'white', fontSize: 14, fontWeight: 600, margin: 0 }}>Horizon AI</p>
-          <p style={{ color: '#555', fontSize: 12, margin: 0 }}>Ask me anything</p>
-        </div>
-        <div
-          style={{
-            width: 8,
-            height: 8,
-            borderRadius: '50%',
-            background: '#22c55e',
-            boxShadow: '0 0 6px #22c55e'
-          }}
-        />
       </div>
 
       {searchQuery ? (
         <div className="flex-1 overflow-y-auto">
-          {searching && <p className="text-xs text-[#777] p-4">Searching...</p>}
+          {searching && <p className="text-xs text-[#A0AEC0] p-4">Searching...</p>}
           {searchResults.map((user) => (
             <div
               key={user.id}
               onClick={() => startConversation(user.id)}
-              className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors"
+              className="px-6 py-4 flex items-center gap-3 cursor-pointer hover:bg-[#222222] transition-colors border-l-2 border-transparent"
             >
               <div className="relative">
-                {renderAvatar(user.username, user.avatar_url, 'w-11 h-11')}
+                {renderAvatar(user.username, user.avatar_url, 'w-12 h-12 rounded-[2px]')}
                 <span
-                  className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${isRecentlyOnline(user.last_seen, user.is_online) ? 'bg-[#22c55e]' : 'bg-[#555]'}`}
+                  className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-[#161616] ${isRecentlyOnline(user.last_seen, user.is_online) ? 'bg-[#10b981]' : 'bg-[#555]'}`}
                 />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <a
                     href={`/user/${user.username}`}
-                    className="text-sm font-medium text-white truncate hover:text-[#c4b5fd]"
+                    className="text-sm font-medium text-[#E2E8F0] truncate hover:text-[#E2E8F0]"
                     onClick={(e) => e.stopPropagation()}
                   >
                     {user.username}
@@ -434,7 +378,7 @@ export default function Sidebar({ userId, activeConversationId, onSelectConversa
                   <a
                     href={`/user/${user.username}`}
                     onClick={(e) => e.stopPropagation()}
-                    className="text-[#777] hover:text-[#c4b5fd] transition-colors"
+                    className="text-[#A0AEC0] hover:text-[#E2E8F0] transition-colors"
                     title="View profile"
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -443,60 +387,72 @@ export default function Sidebar({ userId, activeConversationId, onSelectConversa
                     </svg>
                   </a>
                 </div>
-                <p className="text-xs text-[#888] truncate">{user.full_name || ''}</p>
+                <p className="text-xs text-[#A0AEC0] truncate">{user.full_name || ''}</p>
               </div>
             </div>
           ))}
           {!searching && searchResults.length === 0 && (
-            <p className="text-xs text-[#777] p-4">No users found</p>
+            <p className="text-xs text-[#A0AEC0] p-4">No users found</p>
           )}
         </div>
       ) : (
         <div className="flex-1 overflow-y-auto">
           {conversations.length === 0 && (
-            <p className="text-xs text-[#777] p-4">No conversations yet. Search for a user to start chatting!</p>
+            <p className="text-xs text-[#A0AEC0] p-4">No conversations yet. Search for a user to start chatting!</p>
           )}
 
           {conversations.map((conv) => (
             <div
               key={conv.id}
               onClick={() => onSelectConversation(conv.id)}
-              className={`flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors border-l-2 ${activeConversationId === conv.id ? 'bg-[rgba(124,58,237,0.15)] border-l-[#7c3aed]' : 'border-l-transparent hover:bg-[rgba(255,255,255,0.04)]'}`}
+              className="px-6 py-4 flex items-center gap-3 cursor-pointer transition-colors relative border-l-2"
+              style={{
+                background: activeConversationId === conv.id ? '#222222' : 'transparent',
+                borderLeftColor: activeConversationId === conv.id ? '#7c3aed' : 'transparent',
+              }}
+              onMouseEnter={(e) => {
+                if (activeConversationId !== conv.id) e.currentTarget.style.background = '#222222'
+              }}
+              onMouseLeave={(e) => {
+                if (activeConversationId !== conv.id) e.currentTarget.style.background = 'transparent'
+              }}
             >
               {conv.is_group ? (
                 <div
                   style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: '50%',
+                    width: 48,
+                    height: 48,
+                    borderRadius: 2,
                     flexShrink: 0,
-                    background: 'linear-gradient(135deg, #7c3aed, #06b6d4)',
+                    background: '#333',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
                   }}
                 >
-                  <span style={{ color: 'white', fontSize: 16 }}>👥</span>
+                  <span style={{ color: '#e5e5e5', fontSize: 12, fontWeight: 700 }}>GR</span>
                 </div>
               ) : (
-                <div className="relative shrink-0">
-                  {renderAvatar(conv.other_user?.username || '?', conv.other_user?.avatar_url || null, 'w-11 h-11')}
+                <div 
+                  className="relative shrink-0"
+                >
+                  {renderAvatar(conv.other_user?.username || '?', conv.other_user?.avatar_url || null, 'w-12 h-12 rounded-[2px]')}
                   <span
-                    className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${conv.other_user ? (isRecentlyOnline(conv.other_user.last_seen, conv.other_user.is_online) ? 'bg-[#22c55e]' : 'bg-[#555]') : 'bg-[#555]'}`}
+                    className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-[2px] border-[#161616] ${conv.other_user ? (isRecentlyOnline(conv.other_user.last_seen, conv.other_user.is_online) ? 'bg-[#10b981]' : 'bg-[#555]') : 'bg-[#555]'}`}
                   />
                 </div>
               )}
 
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-between gap-2">
-                  <p className="text-sm font-medium text-white truncate">{conv.is_group ? conv.group_name : conv.other_user?.username}</p>
-                  <p className="text-[11px] text-[#555] shrink-0">{formatTime(conv.last_message_time)}</p>
+                  <p className="text-[14px] font-semibold text-[#e5e5e5] truncate">{conv.is_group ? conv.group_name : conv.other_user?.username}</p>
+                  <p className="text-[11px] font-mono text-[#71717a] shrink-0">{formatTime(conv.last_message_time)}</p>
                 </div>
-                <p className="text-xs text-[#888] truncate">{conv.last_message || 'No messages yet'}</p>
+                <p className="text-[13px] text-[#71717a] truncate mt-0.5">{conv.last_message || 'No messages yet'}</p>
               </div>
 
               {conv.unread_count > 0 && (
-                <span className="bg-[#22c55e] text-white text-[11px] rounded-full w-5 h-5 flex items-center justify-center shrink-0">
+                <span className="bg-[#7c3aed] text-white text-[10px] font-extrabold rounded-full min-w-[20px] h-[20px] px-1.5 flex items-center justify-center shrink-0">
                   {conv.unread_count}
                 </span>
               )}
@@ -505,22 +461,22 @@ export default function Sidebar({ userId, activeConversationId, onSelectConversa
         </div>
       )}
 
-      <div className="bg-[#161616] border-t border-[#222] p-4 flex items-center gap-3">
+      <div className="px-5 py-4 flex items-center gap-3 bg-[#0d0d0d] border-t border-[#2a2a2a]">
         <ProfileEditDialog initialData={{ username: myProfile?.username || '', avatarUrl: myProfile?.avatar_url || '' }}>
-          <button className="flex items-center gap-3 min-w-0 flex-1 text-left cursor-pointer outline-none">
-            {renderAvatar(myProfile?.username || '?', myProfile?.avatar_url || null, 'w-9 h-9')}
+          <button className="flex items-center gap-3 min-w-0 flex-1 text-left cursor-pointer outline-none hover:opacity-80 transition-opacity duration-200">
+            {renderAvatar(myProfile?.username || '?', myProfile?.avatar_url || null, 'w-9 h-9 rounded-[2px]')}
             <div className="min-w-0">
-              <p className="text-sm font-medium text-white truncate">{myProfile?.username || 'Your profile'}</p>
-              <p className="text-xs text-[#888] hover:text-[#c4b5fd] transition-colors">Edit profile</p>
+              <p className="text-[13px] font-semibold text-[#e5e5e5] truncate">{myProfile?.username || 'Your profile'}</p>
+              <p className="text-[11px] text-[#c4a67e] transition-colors">Edit Profile</p>
             </div>
           </button>
         </ProfileEditDialog>
         <button
           onClick={handleSignOut}
-          className="ml-auto p-2 rounded-lg hover:bg-[#222] transition-colors"
+          className="ml-auto p-2 border border-[#2a2a2a] text-[#71717a] hover:text-[#e5e5e5] transition-colors"
           title="Sign out"
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
             <polyline points="16 17 21 12 16 7" />
             <line x1="21" y1="12" x2="9" y2="12" />
@@ -530,3 +486,9 @@ export default function Sidebar({ userId, activeConversationId, onSelectConversa
     </aside>
   )
 }
+
+
+
+
+
+

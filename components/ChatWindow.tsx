@@ -5,6 +5,7 @@ import AISidebar from '@/components/AISidebar'
 import Sidebar from '@/components/Sidebar'
 import HorizonAI from '@/components/HorizonAI'
 import SettingsMenu from '@/components/SettingsMenu'
+import AnoAI from '@/components/ui/animated-shader-background'
 
 interface Message {
   id: string
@@ -503,10 +504,7 @@ export default function ChatWindow({ userId }: Props) {
   }
 
   return (
-    <div
-      className="flex h-full text-white"
-      style={{ background: 'radial-gradient(ellipse at 20% 50%, #0d0520 0%, #080808 60%, #000d1a 100%)' }}
-    >
+    <div className="flex h-full text-[#e5e5e5]" style={{ background: '#0d0d0d' }}>
       <Sidebar
         userId={userId}
         activeConversationId={conversationId}
@@ -520,6 +518,26 @@ export default function ChatWindow({ userId }: Props) {
 
       {showHorizonAI ? (
         <HorizonAI userId={userId} />
+      ) : !conversationId ? (
+        <section className="flex flex-1 flex-col items-center justify-center relative overflow-hidden bg-[#0d0d0d]">
+          <AnoAI />
+          <div className="z-10 flex flex-col items-center gap-5 text-center">
+             <div
+               className="w-16 h-16 rounded-full flex items-center justify-center"
+               style={{
+                 background: 'radial-gradient(circle at 30% 30%, rgba(0,255,214,0.16), rgba(14,24,45,0.72))',
+                 border: '1px solid rgba(0,204,255,0.28)',
+                 boxShadow: '0 0 28px rgba(0,153,255,0.28), 0 0 52px rgba(0,255,214,0.14)',
+               }}
+             >
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6ff6ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+             </div>
+             <div>
+               <h2 className="text-2xl font-bold text-[#dcf7ff] tracking-tight">Welcome to Horizon</h2>
+               <p className="text-[rgba(116,223,255,0.72)] text-sm mt-1">Select a conversation to start messaging</p>
+             </div>
+          </div>
+        </section>
       ) : (
         <section
           key={conversationId || 'empty'}
@@ -531,12 +549,10 @@ export default function ChatWindow({ userId }: Props) {
           }}
         >
           <header
-            className="flex items-center justify-between px-6 py-4"
+            className="flex items-center justify-between px-8 py-4"
             style={{
-              background: 'rgba(10,10,10,0.8)',
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)',
-              borderBottom: '1px solid rgba(255,255,255,0.06)',
+              background: '#161616',
+              borderBottom: '1px solid #2a2a2a',
               position: 'relative',
               zIndex: 2,
             }}
@@ -549,17 +565,17 @@ export default function ChatWindow({ userId }: Props) {
                     width: 38,
                     height: 38,
                     borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #7c3aed, #06b6d4)',
+                    background: 'linear-gradient(135deg, #0f2030, #1e3e58)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center'
                   }}
                 >
-                  <span style={{ color: 'white', fontSize: 16 }}>👥</span>
+                  <span style={{ color: '#E2E8F0', fontSize: 16 }}>👥</span>
                 </div>
                 <div>
-                  <p style={{ color: 'white', fontSize: 15, fontWeight: 600, margin: 0 }}>{groupInfo.name}</p>
-                  <p style={{ color: '#555', fontSize: 12, margin: 0 }}>{groupInfo.memberCount} members</p>
+                  <p style={{ color: '#E2E8F0', fontSize: 15, fontWeight: 600, margin: 0 }}>{groupInfo.name}</p>
+                  <p style={{ color: '#A0AEC0', fontSize: 12, margin: 0 }}>{groupInfo.memberCount} members</p>
                 </div>
               </div>
             ) : otherUser ? (
@@ -574,16 +590,16 @@ export default function ChatWindow({ userId }: Props) {
                         </span>
                       )}
                     </div>
-                    <span className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white ${otherUser.is_online ? 'bg-[#22c55e]' : 'bg-[#555]'}`} />
                   </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-semibold text-white truncate">{otherUser.username}</p>
-                    <p className="text-xs text-[#666]">{otherUser.is_online ? 'Online' : 'Offline'}</p>
+                  <div className="min-w-0 flex flex-col justify-center">
+                    <p className="text-[15px] font-semibold text-[#E2E8F0] truncate leading-tight">{otherUser.username}</p>
+                    <div className="flex items-center gap-1.5 mt-0.5">
+                      <span className={`w-2 h-2 rounded-full ${otherUser.is_online ? 'bg-[#A0AEC0] animate-pulse' : 'bg-[#4A5568]'}`} />
+                      <p className={`text-[12px] leading-tight ${otherUser.is_online ? 'text-[#A0AEC0]' : 'text-[#A0AEC0]'}`}>{otherUser.is_online ? 'Online' : 'Offline'}</p>
+                    </div>
                   </div>
                 </>
-              ) : (
-                <p className="text-sm font-semibold text-[#666]">No conversation selected</p>
-              )}
+              ) : null}
             </div>
 
             <div className="flex items-center gap-3">
@@ -597,27 +613,20 @@ export default function ChatWindow({ userId }: Props) {
 
           <main
             key={conversationId || 'empty'}
-            className="flex-1 overflow-y-auto px-6 py-5 space-y-3"
-            style={{ animation: 'fadeIn 0.3s ease forwards' }}
+            className="flex-1 overflow-y-auto py-8 space-y-6"
+            style={{
+              animation: 'fadeIn 0.3s ease forwards',
+              paddingLeft: 32,
+              paddingRight: 32,
+            }}
           >
-            {conversationId === null ? (
-              <div className="flex-1 flex flex-col items-center justify-center gap-4">
-                <div className="w-24 h-24 rounded-full bg-purple-600/20 flex items-center justify-center">
-                  <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-purple-400">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                  </svg>
-                </div>
-                <p className="text-white font-medium">Welcome to Horizon</p>
-                <p className="text-[#666] text-sm">Search for a user in the sidebar to start chatting</p>
-              </div>
-            ) : (
-              <>
+            <>
                 {messages.length === 0 && (
-                  <p className="text-center text-[#666] mt-10">No messages yet. Say hello!</p>
+                  <p className="text-center text-[#A0AEC0] mt-10">No messages yet. Say hello!</p>
                 )}
                 {messages.map((msg) => (
                   <div key={msg.id} className={`flex message-bubble ${msg.sender_id === userId ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`flex flex-col max-w-xs ${msg.sender_id === userId ? 'items-end' : 'items-start'}`}>
+                    <div className={`flex flex-col max-w-[60%] ${msg.sender_id === userId ? 'items-end' : 'items-start'}`}>
                       {msg.media_url && msg.media_type === 'image' && (
                         <div
                           style={{
@@ -647,26 +656,26 @@ export default function ChatWindow({ userId }: Props) {
                       )}
                       {msg.content && (
                         <div
-                          className={`px-4 py-2 rounded-2xl text-sm text-white ${msg.sender_id === userId ? 'rounded-br-sm' : 'rounded-bl-sm'}`}
+                          className="px-[18px] py-[14px] text-[14px] leading-[1.5] text-[#e5e5e5]"
                           style={
                             msg.sender_id === userId
                               ? {
-                                  background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
-                                  boxShadow: '0 0 15px rgba(124,58,237,0.3)',
+                                  background: '#7c3aed',
+                                  color: 'white',
+                                  clipPath: 'polygon(0 0, 100% 0, 100% 100%, 8px 100%)',
                                 }
                               : {
-                                  background: 'rgba(255,255,255,0.06)',
-                                  border: '1px solid rgba(255,255,255,0.08)',
-                                  backdropFilter: 'blur(10px)',
-                                  WebkitBackdropFilter: 'blur(10px)',
+                                  background: '#222222',
+                                  border: '1px solid #2a2a2a',
+                                  clipPath: 'polygon(0 0, 100% 0, calc(100% - 8px) 100%, 0 100%)',
                                 }
                           }
                         >
                           {msg.content}
                         </div>
                       )}
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                        <span style={{ fontSize: 11, color: '#555' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 4 }}>
+                        <span style={{ fontSize: 10, fontFamily: '"JetBrains Mono", monospace', color: '#71717a' }}>
                           {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                         {msg.sender_id !== userId && (
@@ -674,7 +683,7 @@ export default function ChatWindow({ userId }: Props) {
                             onClick={() => translateMessage(msg.id, msg.content)}
                             style={{
                               background: 'none', border: 'none',
-                              color: '#555', fontSize: 11,
+                              color: '#71717a', fontSize: 11,
                               cursor: 'pointer', padding: '0 4px'
                             }}
                           >
@@ -682,17 +691,18 @@ export default function ChatWindow({ userId }: Props) {
                           </button>
                         )}
                         {msg.sender_id === userId && (
-                          <span style={{ fontSize: 11, color: msg.is_read ? '#7c3aed' : '#555' }}>
+                          <span style={{ fontSize: 10, color: '#7c3aed', fontFamily: '"JetBrains Mono", monospace' }}>
                             {msg.is_read ? '\u2713\u2713' : '\u2713'}
                           </span>
                         )}
                       </div>
                       {translatedMessages[msg.id] && (
                         <p style={{
-                          fontSize: 12, color: '#888',
+                          fontSize: 12, color: '#71717a',
                           margin: '4px 0 0', fontStyle: 'italic',
-                          padding: '4px 8px',
-                          background: 'rgba(255,255,255,0.04)',
+                          padding: '6px 10px',
+                          background: '#222222',
+                          border: '1px solid #2a2a2a',
                           borderRadius: 8
                         }}>
                           {translatedMessages[msg.id]}
@@ -702,49 +712,54 @@ export default function ChatWindow({ userId }: Props) {
                   </div>
                 ))}
                 <div ref={bottomRef} />
-              </>
-            )}
+            </>
           </main>
 
           {isTyping && (
-            <div style={{ padding: '8px 24px', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div
+              style={{
+                padding: '0 32px 16px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+              }}
+            >
               <div
                 style={{
                   display: 'flex',
                   gap: 4,
                   alignItems: 'center',
-                  background: 'rgba(255,255,255,0.06)',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                  borderRadius: 20,
-                  padding: '8px 14px',
+                  background: '#2D2D2D',
+                  border: '1px solid rgb(31 41 55)',
+                  borderRadius: '18px 18px 18px 4px',
+                  padding: '10px 14px',
                   backdropFilter: 'blur(10px)',
                 }}
               >
-                <span className="typing-dot" style={{ width: 6, height: 6, borderRadius: '50%', background: '#888', display: 'inline-block' }} />
-                <span className="typing-dot" style={{ width: 6, height: 6, borderRadius: '50%', background: '#888', display: 'inline-block' }} />
-                <span className="typing-dot" style={{ width: 6, height: 6, borderRadius: '50%', background: '#888', display: 'inline-block' }} />
+                <span className="typing-dot" style={{ width: 5, height: 5, borderRadius: '50%', background: '#A0AEC0', display: 'inline-block' }} />
+                <span className="typing-dot" style={{ width: 5, height: 5, borderRadius: '50%', background: '#A0AEC0', display: 'inline-block' }} />
+                <span className="typing-dot" style={{ width: 5, height: 5, borderRadius: '50%', background: '#A0AEC0', display: 'inline-block' }} />
               </div>
-              <span style={{ fontSize: 12, color: '#555' }}>{otherUser?.username} is typing...</span>
             </div>
           )}
 
           <footer
-            className="px-6 py-4"
+            className="py-6"
             style={{
-              background: 'rgba(10,10,10,0.8)',
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)',
-              borderTop: '1px solid rgba(255,255,255,0.06)',
+              paddingLeft: 32,
+              paddingRight: 32,
+              background: '#161616',
+              borderTop: '1px solid #2a2a2a',
             }}
           >
             {loadingReplies && smartReplies.length === 0 && (
-              <div style={{ padding: '8px 24px', color: '#666', fontSize: 12 }}>
+              <div style={{ padding: '0 0 12px', color: '#71717a', fontSize: 12 }}>
                 Thinking...
               </div>
             )}
             {smartReplies.length > 0 && (
               <div style={{
-                padding: '8px 24px',
+                padding: '0 0 12px',
                 display: 'flex', gap: 8, flexWrap: 'wrap'
               }}>
                 {smartReplies.map((reply, i) => (
@@ -754,19 +769,13 @@ export default function ChatWindow({ userId }: Props) {
                       setInput(reply)
                       setSmartReplies([])
                     }}
+                    className="hover:brightness-110 transition-all duration-200"
                     style={{
                       padding: '6px 14px',
-                      background: 'rgba(124,58,237,0.15)',
-                      border: '1px solid rgba(124,58,237,0.3)',
-                      borderRadius: 20, color: '#c4b5fd',
+                      background: 'transparent',
+                      border: '1px solid #2a2a2a',
+                      borderRadius: 0, color: '#c4a67e',
                       fontSize: 13, cursor: 'pointer',
-                      transition: 'all 0.2s'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = 'rgba(124,58,237,0.3)'
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'rgba(124,58,237,0.15)'
                     }}
                   >{reply}</button>
                 ))}
@@ -819,23 +828,28 @@ export default function ChatWindow({ userId }: Props) {
                 onClick={() => fileInputRef.current?.click()}
                 disabled={conversationId === null}
                 style={{
-                  padding: '10px 12px',
-                  borderRadius: 12,
-                  background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                  color: '#888',
+                  width: '46px',
+                  height: '46px',
+                  flexShrink: 0,
+                  borderRadius: 0,
+                  background: 'none',
+                  border: 'none',
+                  color: '#71717a',
                   cursor: 'pointer',
-                  fontSize: 18,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
               >
-                {'\uD83D\uDCCE'}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
               </button>
               <input
-                className="flex-1 rounded-xl px-4 py-2.5 text-sm outline-none text-white placeholder:text-[#666] border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.05)] focus:border-[rgba(124,58,237,0.5)]"
-                placeholder="Type a message..."
+                className="flex-1 px-5 py-3.5 text-[14px] outline-none text-[#e5e5e5] placeholder-[#71717a] transition-all duration-200"
+                style={{
+                  background: '#0d0d0d',
+                  border: '1px solid #2a2a2a',
+                }}
+                placeholder="Etch a message..."
                 value={input}
                 onChange={handleInputChange}
                 onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
@@ -843,20 +857,22 @@ export default function ChatWindow({ userId }: Props) {
               />
               <button
                 onClick={sendMessage}
-                className="px-4 py-2.5 rounded-xl text-white text-sm transition-colors disabled:opacity-50 neon-purple hover:brightness-110"
+                className="px-6 py-3 text-white font-extrabold text-[12px] uppercase tracking-[1px] transition-all duration-200 disabled:opacity-50 hover:-translate-y-0.5 flex-shrink-0"
                 style={{
-                  background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
-                  boxShadow: '0 0 20px rgba(124,58,237,0.4)',
+                  background: '#7c3aed',
+                  border: 'none',
                 }}
                 disabled={conversationId === null || uploadingMedia}
               >
                 {uploadingMedia ? 'Uploading...' : 'Send'}
               </button>
             </div>
-            {sendError && <p className="pt-2 text-sm text-red-400">{sendError}</p>}
+            {sendError && <p className="pt-2 text-sm text-[#ef4444]">{sendError}</p>}
           </footer>
         </section>
       )}
     </div>
   )
 }
+
+

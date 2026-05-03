@@ -4,8 +4,8 @@ html, body {
   height: 100%;
   margin: 0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #080808;
-  color: #ffffff;
+  background: #0d0d0d;
+  color: #e5e5e5;
 }
 
 * { box-sizing: border-box; }
