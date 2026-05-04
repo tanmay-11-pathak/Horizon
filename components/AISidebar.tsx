@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { createPortal } from 'react-dom'
 
 interface Message {
   id: string
@@ -68,78 +69,81 @@ export default function AISidebar({ messages, onOpenChange }: Props) {
         {open ? 'Close AI' : 'AI Assistant'}
       </button>
 
-      {open && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 70,
-            right: 16,
-            width: 320,
-            background: '#161616',
-            border: '1px solid #2a2a2a',
-            borderRadius: 0,
-            padding: 20,
-            zIndex: 99999,
-            pointerEvents: 'auto',
-            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 16,
-            color: '#e5e5e5',
-          }}
-        >
-          <h2 className="font-semibold text-sm">AI Assistant</h2>
+      {open &&
+        typeof document !== 'undefined' &&
+        createPortal(
+          <div
+            style={{
+              position: 'fixed',
+              top: 70,
+              right: 16,
+              width: 320,
+              background: '#161616',
+              border: '1px solid #2a2a2a',
+              borderRadius: 0,
+              padding: 20,
+              zIndex: 2147483647,
+              pointerEvents: 'auto',
+              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 16,
+              color: '#e5e5e5',
+            }}
+          >
+            <h2 className="font-semibold text-sm">AI Assistant</h2>
 
-          <div>
-            <button
-              onClick={summarize}
-              disabled={loadingSummary}
-              className="w-full px-3 py-2 rounded-xl text-sm transition-colors"
-              style={{ background: '#222222', border: '1px solid #2a2a2a' }}
-            >
-              {loadingSummary ? 'Summarizing...' : 'Summarize this chat'}
-            </button>
-            {summary && (
-              <p className="mt-2 text-sm text-[#71717a] bg-[#222222] p-3">
-                {summary}
-              </p>
-            )}
-          </div>
+            <div>
+              <button
+                onClick={summarize}
+                disabled={loadingSummary}
+                className="w-full px-3 py-2 rounded-xl text-sm transition-colors"
+                style={{ background: '#222222', border: '1px solid #2a2a2a' }}
+              >
+                {loadingSummary ? 'Summarizing...' : 'Summarize this chat'}
+              </button>
+              {summary && (
+                <p className="mt-2 text-sm text-[#71717a] bg-[#222222] p-3">
+                  {summary}
+                </p>
+              )}
+            </div>
 
-          <div className="flex flex-col gap-2">
-            <input
-              className="border px-3 py-2 text-sm outline-none text-[#e5e5e5]"
-              placeholder="Ask AI anything..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && askAI()}
-              style={{
-                borderColor: '#2a2a2a',
-                background: '#0d0d0d',
-                position: 'relative',
-                zIndex: 1,
-                pointerEvents: 'auto',
-              }}
-            />
-            <button
-              onClick={askAI}
-              disabled={loadingChat}
-              className="px-3 py-2 text-sm transition-colors text-white"
-              style={{
-                background: '#7c3aed',
-                border: 'none',
-              }}
-            >
-              {loadingChat ? 'Thinking...' : 'Ask'}
-            </button>
-            {reply && (
-              <p className="text-sm text-[#71717a] bg-[#222222] p-3">
-                {reply}
-              </p>
-            )}
-          </div>
-        </div>
-      )}
+            <div className="flex flex-col gap-2">
+              <input
+                className="border px-3 py-2 text-sm outline-none text-[#e5e5e5]"
+                placeholder="Ask AI anything..."
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && askAI()}
+                style={{
+                  borderColor: '#2a2a2a',
+                  background: '#0d0d0d',
+                  position: 'relative',
+                  zIndex: 1,
+                  pointerEvents: 'auto',
+                }}
+              />
+              <button
+                onClick={askAI}
+                disabled={loadingChat}
+                className="px-3 py-2 text-sm transition-colors text-white"
+                style={{
+                  background: '#7c3aed',
+                  border: 'none',
+                }}
+              >
+                {loadingChat ? 'Thinking...' : 'Ask'}
+              </button>
+              {reply && (
+                <p className="text-sm text-[#71717a] bg-[#222222] p-3">
+                  {reply}
+                </p>
+              )}
+            </div>
+          </div>,
+          document.body
+        )}
     </>
   )
 }

@@ -80,7 +80,7 @@ export default function HorizonAI({ userId }: Props) {
 
   return (
     <div
-      className="flex flex-1 flex-col"
+      className="flex h-full min-h-0 flex-col"
       style={{
         background: 'radial-gradient(ellipse at 20% 50%, #0d0520 0%, #080808 60%, #000d1a 100%)'
       }}
@@ -128,7 +128,7 @@ export default function HorizonAI({ userId }: Props) {
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
+      <div className="min-h-0 flex-1 overflow-y-auto px-6 py-5 space-y-4">
         {loadingHistory ? (
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
             <p style={{ color: '#555', fontSize: 14 }}>Loading conversation...</p>
