@@ -1,7 +1,11 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 
-export default function LandingPage() {
+interface LandingPageProps {
+  isLoggedIn?: boolean
+}
+
+export default function LandingPage({ isLoggedIn = false }: LandingPageProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [scrollY, setScrollY] = useState(0)
 
@@ -125,31 +129,56 @@ export default function LandingPage() {
             onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.5)'}
             >{label}</a>
           ))}
-          <a href="/sign-in" style={{
-            color: 'rgba(255,255,255,0.5)', textDecoration: 'none',
-            fontFamily: 'monospace', fontSize: '0.75rem',
-            letterSpacing: '0.1em', textTransform: 'uppercase'
-          }}>Sign in</a>
-          <a href="/sign-up" style={{
-            padding: '0.6rem 1.4rem',
-            background: 'white', color: 'black',
-            textDecoration: 'none', fontFamily: 'monospace',
-            fontWeight: 700, fontSize: '0.7rem',
-            letterSpacing: '0.1em', textTransform: 'uppercase',
-            clipPath: 'polygon(8% 0, 100% 0, 92% 100%, 0% 100%)',
-            transition: 'all 0.3s'
-          }}
-          onMouseEnter={e => {
-            e.currentTarget.style.background = '#7c3aed'
-            e.currentTarget.style.color = 'white'
-            e.currentTarget.style.boxShadow = '0 0 30px rgba(124,58,237,0.5)'
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.background = 'white'
-            e.currentTarget.style.color = 'black'
-            e.currentTarget.style.boxShadow = 'none'
-          }}
-          >Get Access</a>
+          {isLoggedIn ? (
+            <a href="/chat" style={{
+              padding: '0.6rem 1.4rem',
+              background: 'white', color: 'black',
+              textDecoration: 'none', fontFamily: 'monospace',
+              fontWeight: 700, fontSize: '0.7rem',
+              letterSpacing: '0.1em', textTransform: 'uppercase',
+              clipPath: 'polygon(8% 0, 100% 0, 92% 100%, 0% 100%)',
+              transition: 'all 0.3s'
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = '#7c3aed'
+              e.currentTarget.style.color = 'white'
+              e.currentTarget.style.boxShadow = '0 0 30px rgba(124,58,237,0.5)'
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'white'
+              e.currentTarget.style.color = 'black'
+              e.currentTarget.style.boxShadow = 'none'
+            }}
+            >Open Chat</a>
+          ) : (
+            <>
+              <a href="/sign-in" style={{
+                color: 'rgba(255,255,255,0.5)', textDecoration: 'none',
+                fontFamily: 'monospace', fontSize: '0.75rem',
+                letterSpacing: '0.1em', textTransform: 'uppercase'
+              }}>Sign in</a>
+              <a href="/sign-up" style={{
+                padding: '0.6rem 1.4rem',
+                background: 'white', color: 'black',
+                textDecoration: 'none', fontFamily: 'monospace',
+                fontWeight: 700, fontSize: '0.7rem',
+                letterSpacing: '0.1em', textTransform: 'uppercase',
+                clipPath: 'polygon(8% 0, 100% 0, 92% 100%, 0% 100%)',
+                transition: 'all 0.3s'
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = '#7c3aed'
+                e.currentTarget.style.color = 'white'
+                e.currentTarget.style.boxShadow = '0 0 30px rgba(124,58,237,0.5)'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'white'
+                e.currentTarget.style.color = 'black'
+                e.currentTarget.style.boxShadow = 'none'
+              }}
+              >Get Access</a>
+            </>
+          )}
         </div>
       </nav>
 
