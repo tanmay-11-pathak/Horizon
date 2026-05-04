@@ -350,7 +350,29 @@ export default function MentorHub({ userId }: Props) {
               <button
                 key={s}
                 onClick={() => { setInput(s); adjustHeight() }}
-                style={{ background: 'rgba(18,18,18,0.7)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.06)', padding: '8px 16px', borderRadius: 100, fontSize: 13, color: '#8c8c8c', cursor: 'pointer' }}
+                style={{
+                  background: 'rgba(18,18,18,0.7)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255,255,255,0.06)',
+                  padding: '8px 16px',
+                  borderRadius: 100,
+                  fontSize: 13,
+                  color: '#8c8c8c',
+                  cursor: 'pointer',
+                  transition: '250ms cubic-bezier(0.4, 0, 0.2, 1)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)'
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.08)'
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'
+                  e.currentTarget.style.color = '#f2f2f2'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)'
+                  e.currentTarget.style.background = 'rgba(18,18,18,0.7)'
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
+                  e.currentTarget.style.color = '#8c8c8c'
+                }}
               >
                 {s}
               </button>
@@ -369,11 +391,31 @@ export default function MentorHub({ userId }: Props) {
             </div>
           )}
 
-          <div style={{ background: 'rgba(18,18,18,0.7)', backdropFilter: 'blur(20px)', borderRadius: 20, border: '1px solid rgba(255,255,255,0.06)', padding: 6, boxShadow: '0 10px 40px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center' }}>
+          <div
+            style={{
+              background: 'rgba(18,18,18,0.7)',
+              backdropFilter: 'blur(20px)',
+              borderRadius: 20,
+              border: '1px solid rgba(255,255,255,0.06)',
+              padding: 6,
+              boxShadow: '0 10px 40px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.03)',
+              display: 'flex',
+              alignItems: 'center',
+              transition: '250ms cubic-bezier(0.4, 0, 0.2, 1)',
+            }}
+          >
             <input type="file" ref={fileInputRef} onChange={handleFileSelect} style={{ display: 'none' }} />
             <button
               onClick={() => fileInputRef.current?.click()}
-              style={{ width: 36, height: 36, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'none', border: 'none', color: '#8c8c8c', cursor: 'pointer' }}
+              style={{ width: 36, height: 36, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'none', border: 'none', color: '#8c8c8c', cursor: 'pointer', transition: '250ms cubic-bezier(0.4, 0, 0.2, 1)' }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(255,255,255,0.05)'
+                e.currentTarget.style.color = '#f2f2f2'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'none'
+                e.currentTarget.style.color = '#8c8c8c'
+              }}
             >
               +
             </button>
@@ -394,7 +436,17 @@ export default function MentorHub({ userId }: Props) {
             <button
               onClick={() => { void sendMessage(); adjustHeight(true) }}
               disabled={loading || uploadingMedia || (!input.trim() && !mediaFile)}
-              style={{ width: 36, height: 36, borderRadius: 12, background: 'none', border: 'none', color: (input.trim() || mediaFile) ? '#5e6ad2' : '#525252', cursor: (input.trim() || mediaFile) ? 'pointer' : 'not-allowed' }}
+              style={{ width: 36, height: 36, borderRadius: 12, background: 'none', border: 'none', color: (input.trim() || mediaFile) ? '#5e6ad2' : '#525252', cursor: (input.trim() || mediaFile) ? 'pointer' : 'not-allowed', transition: '250ms cubic-bezier(0.4, 0, 0.2, 1)' }}
+              onMouseEnter={(e) => {
+                if (input.trim() || mediaFile) {
+                  e.currentTarget.style.color = '#7d88e7'
+                  e.currentTarget.style.transform = 'translateX(1px)'
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = (input.trim() || mediaFile) ? '#5e6ad2' : '#525252'
+                e.currentTarget.style.transform = 'translateX(0)'
+              }}
             >
               →
             </button>
